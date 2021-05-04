@@ -10,7 +10,6 @@ import FormInput from '@App/components/common/FormInput';
 import {
     BodyRow,
     Button,
-    CentralizeContainer,
     Column,
     Container,
     ErrorText,
@@ -20,7 +19,8 @@ import {
     Row,
     SubTitle,
     Table,
-    Title
+    Title,
+    CentralizedRow,
 } from '@App/components/common';
 const LogoUrl = require('../../../assets/images/logo-birdie.svg');
 
@@ -36,7 +36,7 @@ const Dashboard = ({ events, fetchEventsRequest }: Dash) => {
 
     const fetchEventData = async () => {
         setLoaderError(oldState => ({ ...oldState, loader: true, error: 'Loading' }));
-        await fetchEventsRequest(pageAndLimit);
+        await Promise.resolve(fetchEventsRequest(pageAndLimit));
         setLoaderError(oldState => ({ ...oldState, loader: false, error: '' }));
     }
     React.useEffect(() => {
@@ -48,6 +48,14 @@ const Dashboard = ({ events, fetchEventsRequest }: Dash) => {
             ...oldState,
             [event.target.name]: event.target.value,
         }))
+    }
+    const handleNext = async () => {
+        setPageAndLimit(oldState => ({ ...oldState, page: oldState.page + 1 }))
+        fetchEventData()
+    }
+    const handlePrevious = async () => {
+        setPageAndLimit(oldState => ({ ...oldState, page: oldState.page - 1 }))
+        fetchEventData()
     }
 
     return (
@@ -63,7 +71,7 @@ const Dashboard = ({ events, fetchEventsRequest }: Dash) => {
                     onChange={handleInputChange}
                 />
                 <FormInput
-                    label={'Limit'}
+                    label={'Number of Rows'}
                     value={pageAndLimit.limit}
                     name="limit"
                     onChange={handleInputChange}
@@ -72,10 +80,10 @@ const Dashboard = ({ events, fetchEventsRequest }: Dash) => {
                     Filter
                 </Button>
             </Row>
-            {loaderError.loader ?
-                <CentralizeContainer>
+            {loaderError.loader || events.length === 0 ?
+                <CentralizedRow>
                     <Loader />
-                </CentralizeContainer>
+                </CentralizedRow>
                 :
                 <>
                     <Table>
@@ -109,13 +117,18 @@ const Dashboard = ({ events, fetchEventsRequest }: Dash) => {
                         </tbody>
                     </Table>
                     {events.length === 0 && <ErrorText> No Data </ErrorText>}
+                    <CentralizedRow>
+                        {pageAndLimit.page > 1 && <Button onClick={handlePrevious}>Prev</Button>}
+                        <SubTitle>{pageAndLimit.page}</SubTitle>
+                        <Button onClick={handleNext}>Next</Button>
+                    </CentralizedRow>
                 </>
             }
         </Container>
     );
 };
 
-const mapStateToProps = (state: {events: Array<Event>} ) => {
+const mapStateToProps = (state: { events: Array<Event> }) => {
     const { events } = state
     return { events };
 };
