@@ -1,4 +1,4 @@
-const baseUrl: string = `http://localhost:8000`;
+const baseUrl: string = `https://birdie-assessment.herokuapp.com`;
 
 const apiCall = {
     async get(url: string) {

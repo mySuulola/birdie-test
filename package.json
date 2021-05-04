@@ -10,6 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cd backend && npm run dev",
     "backend": "npm run heroku-postbuild && npm start",
+    "build": "cd front-end && npm install && npm run build",
     "heroku-postbuild": "cd backend && npm install --only=dev && npm install"
   },
   "repository": {
