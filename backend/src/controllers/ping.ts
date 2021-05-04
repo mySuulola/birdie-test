@@ -7,3 +7,9 @@ pingController.get('/hello', (_, res) => {
     greetings: 'Thank you for spending some time on this test. All the best 🙌'
   });
 });
+pingController.get('/', (_, res) => {
+  res.status(200).json({
+    status: true,
+    message: 'Welcome to Birdie API 🏅'
+  });
+});
