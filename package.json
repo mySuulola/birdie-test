@@ -23,7 +23,5 @@
     "url": "https://github.com/mySuulola/birdie-test/issues"
   },
   "homepage": "https://github.com/mySuulola/birdie-test#readme",
-  "dependencies": {
-    "concurrently": "^6.0.2"
-  }
+  "dependencies": {}
 }
